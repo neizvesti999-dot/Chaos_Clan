@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chaos Clan | Warhammer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #0d0e12;
+      color: #e1e4ed;
+      padding: 15px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 2px solid #8b0000;
+      margin-bottom: 25px;
+    }
+
+    header h1 {
+      color: #ff3333;
+      font-size: 26px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+    }
+
+    header p {
+      color: #8a8f9e;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .form-box {
+      background: #141720;
+      border: 1px solid #252936;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      color: #a0a5b5;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px;
+      background: #1c202c;
+      border: 1px solid #2e3445;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: #ff3333;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #8b0000, #ff3333);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 12px rgba(255, 51, 51, 0.3);
+      transition: opacity 0.2s;
+    }
+
+    .btn-submit:active {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>⚔️ CHAOS CLAN ⚔️</h1>
+      <p>Официальный портал набора в орден</p>
+    </header>
+
+    <div class="form-box">
+      <form id="clanForm">
+        <div class="form-group">
+          <label>Изначальный (коренной) ник:</label>
+          <input type="text" id="mainNick" placeholder="Например: Player1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Текущий ник в игре:</label>
+          <input type="text" id="currentNick" placeholder="Например: [Chaos] Player1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Возраст:</label>
+          <input type="number" id="age" min="10" max="99" placeholder="16" required>
+        </div>
+
+        <div class="form-group">
+          <label>Желаемое звание:</label>
+          <select id="whRank">
+            <option value="Неофит">Неофит</option>
+            <option value="Брат">Брат</option>
+            <option value="Капитан">Капитан</option>
+            <option value="Магистр Ордена">Магистр Ордена</option>
+            <option value="Примарх">Примарх</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Оценка онлайна (от 1 до 10):</label>
+          <input type="number" id="online" min="1" max="10" placeholder="8" required>
+        </div>
+
+        <div class="form-group">
+          <label>Оценка скилла (от 1 до 10):</label>
+          <input type="number" id="skill" min="1" max="10" placeholder="7" required>
+        </div>
+
+        <div class="form-group">
+          <label>Количество убийств (Kills):</label>
+          <input type="number" id="kills" placeholder="1500" required>
+        </div>
+
+        <div class="form-group">
+          <label>Контакт для связи (Telegram / Discord):</label>
+          <input type="text" id="contact" placeholder="@username" required>
+        </div>
+
+        <button type="submit" class="btn-submit">ОТПРАВИТЬ ЗАЯВКУ</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const TELEGRAM_TOKEN = '8947448196:AAFWHsgbL42vG-G48kbV4RT6P3SL7xRjHEg';
+    const ADMIN_CHAT_ID = '8777947306';
+
+    document.getElementById('clanForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Анти-спам защита (20 секунд)
+      const lastSubmitTime = localStorage.getItem('last_submission_time');
+      const now = Date.now();
+      if (lastSubmitTime && (now - lastSubmitTime < 20000)) {
+        const timeLeft = Math.ceil((20000 - (now - lastSubmitTime)) / 1000);
+        alert(`⚠️ Подождите ${timeLeft} сек. перед повторной отправкой!`);
+        return;
+      }
+
+      const mainNick = document.getElementById('mainNick').value;
+      const currentNick = document.getElementById('currentNick').value;
+      const age = document.getElementById('age').value;
+      const whRank = document.getElementById('whRank').value;
+      const online = document.getElementById('online').value;
+      const skill = document.getElementById('skill').value;
+      const kills = document.getElementById('kills').value;
+      const contact = document.getElementById('contact').value;
+
+      const textMessage = 
+        `⚔️ <b>НОВАЯ ЗАЯВКА В КЛАН</b>\n\n` +
+        `👤 <b>Ник:</b> ${currentNick} (Основной: ${mainNick})\n` +
+        `🔞 <b>Возраст:</b> ${age}\n` +
+        `🎖 <b>Звание:</b> ${whRank}\n` +
+        `🎯 <b>Скилл:</b> ${skill}/10 | <b>Онлайн:</b> ${online}/10\n` +
+        `💀 <b>Убийств:</b> ${kills}\n` +
+        `📱 <b>Контакт:</b> ${contact}`;
+
+      const replyMarkup = {
+        inline_keyboard: [
+          [
+            { text: "🔰 Неофит", callback_data: "approve_Неофит" },
+            { text: "⚔️ Брат", callback_data: "approve_Брат" }
+          ],
+          [
+            { text: "🦅 Капитан", callback_data: "approve_Капитан" },
+            { text: "👑 Магистр", callback_data: "approve_Магистр Ордена" }
+          ],
+          [
+            { text: "🔥 Примарх", callback_data: "approve_Примарх" }
+          ],
+          [
+            { text: "❌ Отклонить", callback_data: "reject" }
+          ]
+        ]
+      };
+
+      fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: ADMIN_CHAT_ID,
+          text: textMessage,
+          parse_mode: 'HTML',
+          reply_markup: replyMarkup
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          localStorage.setItem('last_submission_time', Date.now());
+          alert('Заявка отправлена на рассмотрение!');
+          this.reset();
+        } else {
+          alert('Ошибка отправки.');
+        }
+      })
+      .catch(() => alert('Ошибка сети.'));
+    });
+  </script>
+</body>
+</html>
