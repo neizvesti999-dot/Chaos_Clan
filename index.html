@@ -3,190 +3,307 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Орден Warhammer 40K</title>
+  <title>Chaos Clan | Warhammer</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-    body { background-color: #0b0e14; color: #e1e6f0; min-height: 100vh; padding: 20px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 900px; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+    }
 
-    /* Навигация по вкладкам */
-    .tabs-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #282e3e; padding-bottom: 15px; flex-wrap: wrap; gap: 15px; }
-    .tab-buttons { display: flex; gap: 10px; }
-    .tab-btn { padding: 10px 20px; background: #161a23; border: 1px solid #282e3e; color: #8e95a5; font-weight: bold; font-size: 13px; text-transform: uppercase; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-    .tab-btn.active { background: #ff4655; color: #fff; border-color: #ff4655; }
-    .btn-admin { padding: 8px 14px; background: transparent; color: #ffc107; text-decoration: none; border: 1px solid #ffc107; border-radius: 6px; font-weight: bold; font-size: 12px; text-transform: uppercase; transition: 0.2s; }
-    .btn-admin:hover { background: rgba(255, 193, 7, 0.1); }
+    body {
+      background-color: #0d0e12;
+      color: #e1e4ed;
+      padding: 15px;
+      line-height: 1.5;
+    }
 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-    /* Статистика и поиск */
-    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
-    .stat-card { background: #161a23; border: 1px solid #282e3e; padding: 15px; border-radius: 8px; text-align: center; }
-    .stat-number { font-size: 22px; font-weight: bold; color: #ff4655; }
-    .stat-label { font-size: 12px; color: #8e95a5; text-transform: uppercase; margin-top: 4px; }
+    header {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 2px solid #8b0000;
+      margin-bottom: 20px;
+    }
 
-    .search-box { margin-bottom: 20px; }
-    .search-box input { width: 100%; padding: 14px; background: #161a23; border: 1px solid #282e3e; border-radius: 8px; color: #fff; font-size: 15px; outline: none; transition: 0.3s; }
-    .search-box input:focus { border-color: #ff4655; box-shadow: 0 0 10px rgba(255, 70, 85, 0.2); }
+    header h1 {
+      color: #ff3333;
+      font-size: 26px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+    }
 
-    /* Таблица состава */
-    .table-responsive { background: #161a23; border-radius: 10px; border: 1px solid #282e3e; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
-    th { background: #0f131a; padding: 14px 16px; color: #8e95a5; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #282e3e; }
-    td { padding: 14px 16px; border-bottom: 1px solid #1c2230; font-size: 14px; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover { background: #1a202c; }
+    header p {
+      color: #8a8f9e;
+      font-size: 13px;
+      margin-top: 5px;
+    }
 
-    .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-    .badge-primarch { background: rgba(255, 70, 85, 0.2); color: #ff4655; border: 1px solid #ff4655; }
-    .badge-officer { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid #ffc107; }
-    .badge-brother { background: rgba(78, 205, 196, 0.2); color: #4ecdc4; border: 1px solid #4ecdc4; }
-    .badge-neophyte { background: rgba(142, 149, 165, 0.2); color: #8e95a5; border: 1px solid #8e95a5; }
+    /* Навигация / Вкладки */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
 
-    .nick-sub { display: block; font-size: 11px; color: #718096; margin-top: 2px; }
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      background: #161922;
+      border: 1px solid #2a2e3d;
+      color: #a0a5b5;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-    /* Форма анкеты */
-    .card-form { background: #161a23; padding: 25px; border-radius: 12px; border: 1px solid #282e3e; max-width: 600px; margin: 0 auto; }
-    .form-group { margin-bottom: 16px; }
-    .form-row { display: flex; gap: 12px; }
-    .form-row .form-group { flex: 1; }
-    label { display: block; margin-bottom: 6px; font-size: 12px; color: #8e95a5; font-weight: 600; text-transform: uppercase; }
-    input, select, textarea { width: 100%; padding: 12px; background: #0b0e14; border: 1px solid #282e3e; border-radius: 6px; color: #fff; font-size: 14px; outline: none; transition: 0.3s; }
-    input:focus, select:focus, textarea:focus { border-color: #ff4655; box-shadow: 0 0 8px rgba(255, 70, 85, 0.3); }
-    .btn-submit { width: 100%; padding: 14px; background: #ff4655; border: none; border-radius: 6px; color: #fff; font-weight: bold; font-size: 15px; cursor: pointer; transition: background 0.2s; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
-    .btn-submit:hover { background: #e03e4d; }
+    .tab-btn.active {
+      background: #8b0000;
+      color: #fff;
+      border-color: #ff3333;
+      box-shadow: 0 0 10px rgba(139, 0, 0, 0.4);
+    }
+
+    .tab-content {
+      display: none;
+      background: #141720;
+      border: 1px solid #252936;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Карточки статистики */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: #1c202c;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 4px solid #ff3333;
+      text-align: center;
+    }
+
+    .stat-card .value {
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .stat-card .label {
+      font-size: 11px;
+      color: #8a8f9e;
+      margin-top: 4px;
+    }
+
+    /* Таблица */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #252936;
+    }
+
+    th {
+      background: #1c202c;
+      color: #8a8f9e;
+      font-weight: 600;
+    }
+
+    .nick-sub {
+      display: block;
+      font-size: 11px;
+      color: #727785;
+    }
+
+    /* Значки рангов */
+    .badge {
+      display: inline-block;
+      padding: 3px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .badge-primarch { background: #d4af37; color: #000; }
+    .badge-officer { background: #8b0000; color: #fff; }
+    .badge-brother { background: #2a344d; color: #a5c2ff; }
+    .badge-neophyte { background: #3d3d3d; color: #ccc; }
+
+    /* Форма */
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      color: #a0a5b5;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px;
+      background: #1c202c;
+      border: 1px solid #2e3445;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: #ff3333;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #8b0000, #ff3333);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 12px rgba(255, 51, 51, 0.3);
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <div class="tabs-header">
-      <div class="tab-buttons">
-        <button class="tab-btn active" onclick="switchTab('membersTab', this)">Состав Ордена</button>
-        <button class="tab-btn" onclick="switchTab('formTab', this)">+ Подать заявку</button>
-      </div>
-      <a href="admin.html" class="btn-admin">Админка</a>
+    <header>
+      <h1>⚔️ CHAOS CLAN ⚔️</h1>
+      <p>Официальный портал клана</p>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('rosterTab', this)">Состав клана</button>
+      <button class="tab-btn" onclick="switchTab('applyTab', this)">Подать заявку</button>
     </div>
 
-    <!-- Вкладка 1: Состав -->
-    <div id="membersTab" class="tab-content active">
-      <div class="stats-bar">
+    <!-- Вкладка: Состав -->
+    <div id="rosterTab" class="tab-content active">
+      <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-number" id="totalCount">0</div>
-          <div class="stat-label">Всего воинов</div>
+          <div class="value" id="totalCount">0</div>
+          <div class="label">Всего бойцов</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" id="totalKills">0</div>
-          <div class="stat-label">Суммарно убийств</div>
+          <div class="value" id="totalKills">0</div>
+          <div class="label">Всего убийств</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" id="avgSkill">0 / 10</div>
-          <div class="stat-label">Средний скилл</div>
+          <div class="value" id="avgSkill">0 / 10</div>
+          <div class="label">Средний скилл</div>
         </div>
       </div>
 
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Поиск по нику, званию или контакту..." onkeyup="filterTable()">
-      </div>
-
-      <div class="table-responsive">
+      <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th>Игрок</th>
-              <th>Звание WH40K</th>
+              <th>Боец</th>
+              <th>Звание</th>
               <th>Скилл</th>
               <th>Онлайн</th>
               <th>Убийства</th>
-              <th>Контакт</th>
+              <th>Связь</th>
             </tr>
           </thead>
           <tbody id="membersList">
-            <!-- Список загружается сюда -->
+            <!-- Загружается из JS -->
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Вкладка 2: Анкета -->
-    <div id="formTab" class="tab-content">
-      <div class="card-form">
-        <form id="clanForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="mainNick">Коренной ник</label>
-              <input type="text" id="mainNick" placeholder="Изначальный ник" required>
-            </div>
-            <div class="form-group">
-              <label for="currentNick">Используемый ник</label>
-              <input type="text" id="currentNick" placeholder="Текущий ник" required>
-            </div>
-          </div>
+    <!-- Вкладка: Заявка -->
+    <div id="applyTab" class="tab-content">
+      <form id="clanForm">
+        <div class="form-group">
+          <label>Изначальный (коренной) ник:</label>
+          <input type="text" id="mainNick" placeholder="Например: Player1" required>
+        </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="age">Возраст</label>
-              <input type="number" id="age" min="12" max="99" placeholder="18" required>
-            </div>
-            <div class="form-group">
-              <label for="whRank">Звание в WH40K</label>
-              <select id="whRank">
-                <option value="Примарх">Примарх</option>
-                <option value="Магистр Ордена">Магистр Ордена</option>
-                <option value="Капитан">Капитан</option>
-                <option value="Библиарий">Библиарий</option>
-                <option value="Капеллан">Капеллан</option>
-                <option value="Технодесантник">Технодесантник</option>
-                <option value="Аптекарь">Аптекарь</option>
-                <option value="Ветеран">Ветеран</option>
-                <option value="Боевой Брат">Боевой Брат</option>
-                <option value="Неофит" selected>Неофит</option>
-              </select>
-            </div>
-          </div>
+        <div class="form-group">
+          <label>Текущий ник в игре:</label>
+          <input type="text" id="currentNick" placeholder="Например: [Chaos] Player1" required>
+        </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="online">Онлайн (1-10)</label>
-              <select id="online" required>
-                <option value="5">5 / 10</option>
-                <option value="8">8 / 10</option>
-                <option value="10">10 / 10</option>
-              </select>
-            </div>
+        <div class="form-group">
+          <label>Возраст:</label>
+          <input type="number" id="age" min="10" max="99" placeholder="16" required>
+        </div>
 
-            <div class="form-group">
-              <label for="skill">Скилл (1-10)</label>
-              <select id="skill" required>
-                <option value="5">5 / 10</option>
-                <option value="8">8 / 10</option>
-                <option value="10">10 / 10</option>
-              </select>
-            </div>
-          </div>
+        <div class="form-group">
+          <label>Звание / Должность:</label>
+          <select id="whRank">
+            <option value="Неофит">Неофит</option>
+            <option value="Брат">Брат</option>
+            <option value="Капитан">Капитан</option>
+            <option value="Магистр Ордена">Магистр Ордена</option>
+            <option value="Примарх">Примарх</option>
+          </select>
+        </div>
 
-          <div class="form-group">
-            <label for="kills">Количество убийств (Kills)</label>
-            <input type="number" id="kills" min="0" placeholder="2500" required>
-          </div>
+        <div class="form-group">
+          <label>Оценка онлайна (от 1 до 10):</label>
+          <input type="number" id="online" min="1" max="10" placeholder="8" required>
+        </div>
 
-          <div class="form-group">
-            <label for="contact">Discord / Telegram ID</label>
-            <input type="text" id="contact" placeholder="@username" required>
-          </div>
+        <div class="form-group">
+          <label>Оценка скилла (от 1 до 10):</label>
+          <input type="number" id="skill" min="1" max="10" placeholder="7" required>
+        </div>
 
-          <button type="submit" class="btn-submit">Вступить в Орден</button>
-        </form>
-      </div>
+        <div class="form-group">
+          <label>Количество убийств (Kills):</label>
+          <input type="number" id="kills" placeholder="1500" required>
+        </div>
+
+        <div class="form-group">
+          <label>Контакт для связи (Telegram / Discord):</label>
+          <input type="text" id="contact" placeholder="@username" required>
+        </div>
+
+        <button type="submit" class="btn-submit">ОТПРАВИТЬ ЗАЯВКУ</button>
+      </form>
     </div>
   </div>
 
   <script>
-    const defaultMembers = [
-      { mainNick: 'LordVulkan', currentNick: 'Vulkan_King', whRank: 'Примарх', skill: '10', online: '10', kills: 75000, contact: '@vulkan_lead' },
-      { mainNick: 'BlueKnight', currentNick: 'Ultramarine_99', whRank: 'Капитан', skill: '9', online: '8', kills: 42000, contact: '@ultra_cap' }
-    ];
+    const TELEGRAM_TOKEN = '8947448196:AAFWHsgbL42vG-G48kbV4RT6P3SL7xRjHEg';
+    const TELEGRAM_CHAT_ID = '8777947306';
 
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -203,36 +320,35 @@
     }
 
     function renderMembers() {
-      let members = JSON.parse(localStorage.getItem('wh_members'));
-      if (!members || members.length === 0) {
-        members = defaultMembers;
-        localStorage.setItem('wh_members', JSON.stringify(members));
-      }
-
+      let members = JSON.parse(localStorage.getItem('wh_members')) || [];
       const tbody = document.getElementById('membersList');
       tbody.innerHTML = '';
 
       let totalKills = 0;
       let totalSkill = 0;
 
-      members.forEach(m => {
-        totalKills += Number(m.kills) || 0;
-        totalSkill += Number(m.skill) || 0;
+      if (members.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#8a8f9e; padding:20px;">Список бойцов пуст. Заполните заявку!</td></tr>';
+      } else {
+        members.forEach(m => {
+          totalKills += Number(m.kills) || 0;
+          totalSkill += Number(m.skill) || 0;
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>
-            <strong>${m.currentNick}</strong>
-            <span class="nick-sub">Коренной: ${m.mainNick}</span>
-          </td>
-          <td><span class="badge ${getBadgeClass(m.whRank)}">${m.whRank}</span></td>
-          <td>${m.skill} / 10</td>
-          <td>${m.online} / 10</td>
-          <td>${(Number(m.kills) || 0).toLocaleString()}</td>
-          <td>${m.contact}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>
+              <strong>${m.currentNick}</strong>
+              <span class="nick-sub">Коренной: ${m.mainNick}</span>
+            </td>
+            <td><span class="badge ${getBadgeClass(m.whRank)}">${m.whRank}</span></td>
+            <td>${m.skill} / 10</td>
+            <td>${m.online} / 10</td>
+            <td>${(Number(m.kills) || 0).toLocaleString()}</td>
+            <td>${m.contact}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
 
       document.getElementById('totalCount').innerText = members.length;
       document.getElementById('totalKills').innerText = totalKills.toLocaleString();
@@ -242,39 +358,52 @@
     document.getElementById('clanForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const newMember = {
-        mainNick: document.getElementById('mainNick').value,
-        currentNick: document.getElementById('currentNick').value,
-        whRank: document.getElementById('whRank').value,
-        skill: document.getElementById('skill').value,
-        online: document.getElementById('online').value,
-        kills: parseInt(document.getElementById('kills').value) || 0,
-        contact: document.getElementById('contact').value
-      };
+      const mainNick = document.getElementById('mainNick').value;
+      const currentNick = document.getElementById('currentNick').value;
+      const age = document.getElementById('age').value;
+      const whRank = document.getElementById('whRank').value;
+      const online = document.getElementById('online').value;
+      const skill = document.getElementById('skill').value;
+      const kills = document.getElementById('kills').value;
+      const contact = document.getElementById('contact').value;
 
-      let members = JSON.parse(localStorage.getItem('wh_members')) || [];
-      members.push(newMember);
-      localStorage.setItem('wh_members', JSON.stringify(members));
+      const textMessage = 
+        `⚔️ <b>НОВАЯ ЗАЯВКА В КЛАН</b>\n\n` +
+        `👤 <b>Ник:</b> ${currentNick} (Основной: ${mainNick})\n` +
+        `🔞 <b>Возраст:</b> ${age}\n` +
+        `🎖 <b>Звание:</b> ${whRank}\n` +
+        `🎯 <b>Скилл:</b> ${skill}/10 | <b>Онлайн:</b> ${online}/10\n` +
+        `💀 <b>Убийств:</b> ${kills}\n` +
+        `📱 <b>Контакт:</b> ${contact}`;
 
-      renderMembers();
-      this.reset();
-      
-      // Авто-переключение на вкладку с составом после отправки
-      switchTab('membersTab', document.querySelectorAll('.tab-btn')[0]);
+      fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: textMessage,
+          parse_mode: 'HTML'
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Заявка успешно отправлена в Telegram!');
+          
+          let members = JSON.parse(localStorage.getItem('wh_members')) || [];
+          members.push({ mainNick, currentNick, age, whRank, online, skill, kills, contact });
+          localStorage.setItem('wh_members', JSON.stringify(members));
+          renderMembers();
+
+          this.reset();
+        } else {
+          alert('Ошибка отправки. Убедитесь, что вы нажали /start в боте @anketa_chaos_bot');
+        }
+      })
+      .catch(() => alert('Ошибка сети при отправке.'));
     });
-
-    function filterTable() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      const rows = document.querySelectorAll("#membersList tr");
-
-      rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(input) ? "" : "none";
-      });
-    }
 
     renderMembers();
   </script>
-
 </body>
 </html>
+
